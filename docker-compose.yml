@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: franklink-app
+    ports:
+      - "8000:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1
+    environment:
+      - APP_ENV=development
+      - DEBUG=true
+      - APP_LOG_LEVEL=INFO
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+    depends_on: []
+      # - redis  # DISABLED: Using cloud Redis only to ensure no conflicts
+    networks:
+      - franklink-network
+    restart: unless-stopped
+
+  groupchat-summary-worker:
+    build: .
+    container_name: franklink-groupchat-summary-worker
+    command: python -m app.groupchat.summary.worker --loop --interval-seconds=5
+    environment:
+      - APP_ENV=development
+      - DEBUG=true
+      - GROUPCHAT_SUMMARY_LOG_LEVEL=INFO
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+    depends_on: []
+    networks:
+      - franklink-network
+    restart: unless-stopped
+
+  groupchat-followup-worker:
+    build: .
+    container_name: franklink-groupchat-followup-worker
+    command: python -m app.groupchat.followup.worker --loop --interval-seconds=10
+    environment:
+      - APP_ENV=development
+      - DEBUG=true
+      - GROUPCHAT_FOLLOWUP_LOG_LEVEL=INFO
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+    depends_on: []
+    networks:
+      - franklink-network
+    restart: unless-stopped
+
+  daily-email-worker:
+    build: .
+    container_name: franklink-daily-email-worker
+    command: python -m app.proactive.email.worker --loop --interval-seconds=300
+    environment:
+      - APP_ENV=development
+      - DEBUG=true
+      - DAILY_EMAIL_LOG_LEVEL=INFO
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+    depends_on: []
+    networks:
+      - franklink-network
+    restart: unless-stopped
+
+  proactive-outreach-worker:
+    build: .
+    container_name: franklink-proactive-outreach-worker
+    command: python -m app.proactive.outreach.worker --loop --interval-seconds=300
+    environment:
+      - APP_ENV=development
+      - DEBUG=true
+      - PROACTIVE_OUTREACH_LOG_LEVEL=INFO
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+    depends_on: []
+    networks:
+      - franklink-network
+    restart: unless-stopped
+
+  location-update-worker:
+    build: .
+    container_name: franklink-location-update-worker
+    command: python -m app.proactive.location.worker --loop --interval-seconds=300
+    environment:
+      - APP_ENV=development
+      - DEBUG=true
+      - LOCATION_UPDATE_LOG_LEVEL=INFO
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+    depends_on: []
+    networks:
+      - franklink-network
+    restart: unless-stopped
+
+
+networks:
+  franklink-network:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+        - subnet: fd00::/64
+
+volumes:
+  redis-data:
+  # postgres-data:

@@ -1,0 +1,99 @@
+# Environment / secrets — NEVER commit
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+env/
+VENV/
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.code-workspace
+*.swp
+*.swo
+
+# AI assistant configs
+.claude/
+.spec-workflow/
+.openspec/
+
+# macOS / OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Jupyter / IPython
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Logs
+*.log
+logs/
+
+# Databases
+*.db
+*.sqlite3
+
+# Local scratch / output
+output/
+tmp/
+*.tmp
+
+# Docs build
+/site

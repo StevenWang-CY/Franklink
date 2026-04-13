@@ -1,0 +1,1 @@
+"""Daily email extraction worker."""
